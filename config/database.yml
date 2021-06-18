@@ -1,0 +1,20 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  database: gat_devtest_development
+  pool: 10
+  username: root
+  password: ""
+  host: 127.0.0.1
+  port: 5432
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+  database: gat_devtest_test
+
+production:
+  <<: *default
+  database: gat_devtest_production
