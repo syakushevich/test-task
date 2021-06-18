@@ -2,7 +2,7 @@
 
 module EmailDelivery
   module Api
-    class Emails
+    class Email
       def deliver(_email_address, _subject, _content)
         sleep(5)
       end
