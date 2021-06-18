@@ -4,6 +4,10 @@ require "bundler"
 
 Bundler.require(:default, ENV["APP_ENV"])
 
+Dir[File.expand_path("../config/initializers/*.rb", __dir__)].sort.each do |initializer|
+  require initializer
+end
+
 loading_paths = ["lib"]
 
 loader = Zeitwerk::Loader.new
