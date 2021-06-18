@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+test -z "${APP_ENV}" && APP_ENV="development"
+
+APP_ENV="${APP_ENV}" bundle exec pry -r "./config/application"
