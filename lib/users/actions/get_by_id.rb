@@ -19,6 +19,7 @@ module Users
         user = Users::Models::User.find_by(id: user_id)
 
         if user
+          # TODO: Use DTO
           Success(user)
         else
           Failure(:user_not_found)
