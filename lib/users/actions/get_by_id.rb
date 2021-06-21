@@ -16,7 +16,7 @@ module Users
       end
 
       def call
-        user = Users::Models::User.find_by(id: id)
+        user = Users::Models::User.find_by(id: user_id)
 
         if user
           Success(user)
