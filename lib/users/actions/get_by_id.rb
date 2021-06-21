@@ -6,7 +6,7 @@ module Users
       include Dry::Monads[:result]
 
       class << self
-        def call(user_id)
+        def call(user_id:)
           new(user_id).call
         end
       end
