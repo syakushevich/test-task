@@ -3,3 +3,20 @@
 ENV["APP_ENV"] = "test"
 
 require_relative "../config/application"
+
+RSpec.configure do |config|
+  config.before(:suite) do
+    DatabaseCleaner[:active_record]
+    DatabaseCleaner.strategy = :truncation
+  end
+
+  config.before do
+    DatabaseCleaner[:active_record]
+    DatabaseCleaner[:active_record].strategy = :transaction
+    DatabaseCleaner[:active_record].start
+  end
+
+  config.after do
+    DatabaseCleaner[:active_record].clean
+  end
+end

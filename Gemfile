@@ -14,6 +14,7 @@ gem "sidekiq", "~> 6.2.1"
 gem "zeitwerk", "~> 2.4.2"
 
 group :test do
+  gem "database_cleaner", "~> 2.0.1"
   gem "rspec", "~> 3.10.0"
   gem "simplecov", "~> 0.21.2"
 end
