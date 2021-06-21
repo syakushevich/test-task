@@ -22,7 +22,7 @@ module Users
           # TODO: Use DTO
           Success(user)
         else
-          Failure(:user_not_found)
+          Failure({ code: :user_not_found })
         end
       end
 

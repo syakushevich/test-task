@@ -16,7 +16,7 @@ RSpec.describe Users::Api::User do
         result = described_class.get_by_id(5)
 
         expect(result).to be_failure
-        expect(result.failure).to eq(:user_not_found)
+        expect(result.failure).to eq({ code: :user_not_found })
       end
     end
   end
