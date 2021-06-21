@@ -5,7 +5,8 @@ module Users
     class User
       class << self
         # @param id [Integer] Id of the user to get
-        # @return [Dry::Monads::Result<Users::Api::DTO::User, Failure>] User as Dto in case of success, or a Failure object
+        # @return [Dry::Monads::Result<Users::Api::Dto::User, Failure>] User as Dto in case of success,
+        # or a Failure object
         def get_by_id(id)
           ::Users::Actions::GetById.call(user_id: id)
         end

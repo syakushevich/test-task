@@ -2,7 +2,7 @@
 
 module Users
   module Api
-    module DTO
+    module Dto
       class User < Dry::Struct
         attribute :id, Types::Integer
         attribute :email, Types::String
