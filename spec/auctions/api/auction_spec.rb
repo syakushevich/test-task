@@ -122,6 +122,21 @@ RSpec.describe Auctions::Api::Auction do
           )
         end
       end
+
+      it "creates an order" do
+        auction = prepare_auction_and_bids
+
+        travel_to(Time.now + 1.day + 1.minute) do
+          create_order_method = AuctionDependencies.container.resolve(:create_order)
+
+          expect(create_order_method).to receive(:call).with(
+            auction_id: auction.id,
+            total_payment: 75.0
+          ).and_return(Dry::Monads::Result::Success.new(""))
+
+          described_class.finalize(auction.id)
+        end
+      end
     end
 
     context "when auction is not finished yet" do

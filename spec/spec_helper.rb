@@ -3,6 +3,7 @@
 ENV["APP_ENV"] = "test"
 
 require "active_support/testing/time_helpers"
+require "dry/monads/result"
 require_relative "../config/application"
 
 RSpec.configure do |config|
