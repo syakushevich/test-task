@@ -6,12 +6,12 @@ module Orders
       include Dry::Monads[:result]
 
       class << self
-        def call(params:)
-          new(params).call
+        def call(**kwargs)
+          new(**kwargs).call
         end
       end
 
-      def initialize(params)
+      def initialize(params:)
         @params = params
       end
 
