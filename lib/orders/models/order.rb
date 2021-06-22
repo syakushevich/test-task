@@ -9,6 +9,10 @@ module Orders
       validates :shipping_method, length: { minimum: 1, allow_nil: true }
       validates :payment_method, length: { minimum: 1, allow_nil: true }
 
+      def ship
+        self.status = "shipped"
+      end
+
       private
 
       def set_initial_status

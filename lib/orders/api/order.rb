@@ -26,6 +26,13 @@ module Orders
         def update_payment_method(order_id, value)
           ::Orders::Actions::Update.call(order_id: order_id, payment_method: value)
         end
+
+        # @param order_id [Integer] Id of the order to update
+        # @return [Dry::Monads::Result<Orders::Api::DTO::Order, Failure>] Order as Dto in case of success,
+        # or a Failure object
+        def ship(order_id)
+          ::Orders::Actions::Ship.call(order_id: order_id)
+        end
       end
     end
   end

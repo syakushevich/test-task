@@ -76,6 +76,17 @@ RSpec.describe Orders::Api::Order do
         )
       end
     end
+
+    context "when order not found" do
+      it "returns a failure" do
+        result = described_class.ship(37)
+
+        expect(result).to be_failure
+        expect(result.failure).to eq(
+          code: :order_not_found
+        )
+      end
+    end
   end
 
   describe ".update_payment_method" do
@@ -112,6 +123,109 @@ RSpec.describe Orders::Api::Order do
         expect(result.failure).to eq(
           code: :order_not_updated,
           details: { payment_method: ["is too short (minimum is 1 character)"] }
+        )
+      end
+    end
+
+    context "when order not found" do
+      it "returns a failure" do
+        result = described_class.ship(37)
+
+        expect(result).to be_failure
+        expect(result.failure).to eq(
+          code: :order_not_found
+        )
+      end
+    end
+  end
+
+  describe ".ship" do
+    context "when order has shipping_method and payment_method set" do
+      it "ships the order" do
+        order = Orders::Models::Order.create(
+          auction_id: 43,
+          total_payment: 1500.0,
+          shipping_method: "AirForce One",
+          payment_method: "gold"
+        )
+
+        result = described_class.ship(order.id)
+
+        expect(result).to be_success
+        expect(result.value!.to_h).to match(
+          order.attributes.symbolize_keys
+            .except(:created_at, :updated_at)
+            .merge(
+              status: "shipped"
+            )
+        )
+      end
+    end
+
+    context "when order has no shipping_method" do
+      it "returns a failure with info about missing field" do
+        order = Orders::Models::Order.create(
+          auction_id: 43,
+          total_payment: 1500.0,
+          payment_method: "gold"
+        )
+
+        result = described_class.ship(order.id)
+
+        expect(result).to be_failure
+        expect(result.failure).to eq(
+          code: :order_not_shipped,
+          details: { shipping_method: ["is missing"] }
+        )
+      end
+    end
+
+    context "when order has no payment_method" do
+      it "returns a failure with info about missing field" do
+        order = Orders::Models::Order.create(
+          auction_id: 43,
+          total_payment: 1500.0,
+          shipping_method: "AirForce One"
+        )
+
+        result = described_class.ship(order.id)
+
+        expect(result).to be_failure
+        expect(result.failure).to eq(
+          code: :order_not_shipped,
+          details: { payment_method: ["is missing"] }
+        )
+      end
+    end
+
+    context "when some invalid data present on the order" do
+      it "returns a failure with info about the error" do
+        order = Orders::Models::Order.create(
+          auction_id: 43,
+          total_payment: 1500.0,
+          shipping_method: "AirForce One",
+          payment_method: "gold"
+        )
+
+        order.update_column(:total_payment, -100)
+
+        result = described_class.ship(order.id)
+
+        expect(result).to be_failure
+        expect(result.failure).to eq(
+          code: :order_not_shipped,
+          details: { total_payment: ["must be greater than 0"] }
+        )
+      end
+    end
+
+    context "when order does not exist" do
+      it "returns a failure" do
+        result = described_class.ship(37)
+
+        expect(result).to be_failure
+        expect(result.failure).to eq(
+          code: :order_not_found
         )
       end
     end
