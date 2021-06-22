@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.money "total_payment", scale: 2
     t.string "shipping_method"
     t.string "payment_method"
+    t.string "status"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["auction_id"], name: "index_orders_on_auction_id"

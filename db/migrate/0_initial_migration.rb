@@ -34,6 +34,7 @@ class InitialMigration < ActiveRecord::Migration[6.1]
       t.money :total_payment
       t.string :shipping_method
       t.string :payment_method
+      t.string :status
 
       t.timestamps
     end
