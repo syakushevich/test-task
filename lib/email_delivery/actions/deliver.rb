@@ -4,12 +4,12 @@ module EmailDelivery
   module Actions
     class Deliver
       class << self
-        def call(email_address:, subject:, content:)
-          new(email_address, subject, content).call
+        def call(**kwargs)
+          new(**kwargs).call
         end
       end
 
-      def initialize(email_address, subject, content)
+      def initialize(email_address:, subject:, content:)
         @email_address = email_address
         @subject = subject
         @content = content

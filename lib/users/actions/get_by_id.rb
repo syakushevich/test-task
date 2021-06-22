@@ -6,12 +6,12 @@ module Users
       include Dry::Monads[:result]
 
       class << self
-        def call(user_id:)
-          new(user_id).call
+        def call(**kwargs)
+          new(**kwargs).call
         end
       end
 
-      def initialize(user_id)
+      def initialize(user_id:)
         @user_id = user_id
       end
 

@@ -9,12 +9,12 @@ module Auctions
       include Dry::Monads::Do.for(:call)
 
       class << self
-        def call(auction_id:)
-          new(auction_id).call
+        def call(**kwargs)
+          new(**kwargs).call
         end
       end
 
-      def initialize(auction_id)
+      def initialize(auction_id:)
         @auction_id = auction_id
       end
 
