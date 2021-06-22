@@ -20,6 +20,7 @@ module Orders
 
       def call
         order = yield fetch_order
+        yield validate_complete_order(order)
         yield ship(order)
 
         Success(Orders::Api::Dto::Order.from_active_record(order))
@@ -35,12 +36,9 @@ module Orders
         order ? Success(order) : Failure({ code: :order_not_found })
       end
 
-      def ship(order)
+      def validate_complete_order(order)
         if order.payment_method && order.shipping_method
-          order.ship
-          order.save
-
-          order.errors.empty? ? Success(order) : Failure({ code: :order_not_shipped, details: order.errors.to_hash })
+          Success()
         else
           details = {
             payment_method: order.payment_method ? nil : ["is missing"],
@@ -48,6 +46,17 @@ module Orders
           }.compact
 
           Failure({ code: :order_not_shipped, details: details })
+        end
+      end
+
+      def ship(order)
+        order.ship
+        order.save
+
+        if order.errors.empty?
+          Success()
+        else
+          Failure({ code: :order_not_shipped, details: order.errors.to_hash })
         end
       end
     end
