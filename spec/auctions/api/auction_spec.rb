@@ -83,4 +83,69 @@ RSpec.describe Auctions::Api::Auction do
       end
     end
   end
+
+  describe ".finalize" do
+    def prepare_auction_and_bids
+      auction = Auctions::Models::Auction.create(
+        name: "Leonardo da Vinci's pencil",
+        creator_id: 15,
+        package_weight: 0.05,
+        package_size_x: 0.03,
+        package_size_y: 0.005,
+        package_size_z: 0.002,
+        finishes_at: Time.now + 1.day
+      )
+      Auctions::Models::Bid.create(bidder_id: 231, auction_id: auction.id, amount: 30.0)
+      Auctions::Models::Bid.create(bidder_id: 67, auction_id: auction.id, amount: 75.0)
+      Auctions::Models::Bid.create(bidder_id: 142, auction_id: auction.id, amount: 43.5)
+
+      auction
+    end
+
+    context "when auction can be finalized" do
+      include ActiveSupport::Testing::TimeHelpers
+
+      it "closes the auction and sets the winner_id to the highest bidder id" do
+        auction = prepare_auction_and_bids
+
+        travel_to(Time.now + 1.day + 1.minute) do
+          result = described_class.finalize(auction.id)
+
+          expect(result).to be_success
+          expect(result.value!.to_h).to match(
+            auction.attributes.symbolize_keys
+              .except(:created_at, :updated_at)
+              .merge(
+                winner_id: 67,
+                status: "closed"
+              )
+          )
+        end
+      end
+    end
+
+    context "when auction is not finished yet" do
+      it "returns a failure" do
+        auction = prepare_auction_and_bids
+
+        result = described_class.finalize(auction.id)
+
+        expect(result).to be_failure
+        expect(result.failure).to eq(
+          code: :auction_not_finished_yet
+        )
+      end
+    end
+
+    context "when auction does not exist" do
+      it "returns a failure" do
+        result = described_class.finalize(67)
+
+        expect(result).to be_failure
+        expect(result.failure).to eq(
+          code: :auction_not_found
+        )
+      end
+    end
+  end
 end

@@ -17,6 +17,13 @@ module Auctions
         def place_bid(bid_params)
           ::Auctions::Actions::CreateBid.call(params: bid_params)
         end
+
+        # @param auction_id [Integer] Id of the auction to finalize
+        # @return [Dry::Monads::Result<Auctions::Api::DTO::Auction, Failure>] Auction with the winner_id as Dto
+        # in case of success, or a Failure object
+        def finalize(auction_id)
+          ::Auctions::Actions::Finalize.call(auction_id: auction_id)
+        end
       end
     end
   end
