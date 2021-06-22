@@ -22,7 +22,7 @@ module Orders
 
       def call
         order = yield fetch_order
-        yield update_order
+        yield update(order)
 
         Success(Orders::Api::Dto::Order.from_active_record(order))
       end
@@ -37,7 +37,7 @@ module Orders
         order ? Success(order) : Failure({ code: :order_not_found })
       end
 
-      def update_order
+      def update(order)
         order.update(update_params)
 
         if order.errors.empty?
