@@ -20,7 +20,7 @@ module Users
 
         if user
           # TODO: Use DTO
-          Success(user)
+          Success(Users::Api::Dto::User.from_active_record(user))
         else
           Failure({ code: :user_not_found })
         end

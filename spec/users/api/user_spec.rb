@@ -7,7 +7,7 @@ RSpec.describe Users::Api::User do
         result = described_class.get_by_id(created_user.id)
 
         expect(result).to be_success
-        expect(result.value!).to eq(created_user)
+        expect(result.value!.to_h).to eq(created_user.attributes.symbolize_keys.except(:created_at, :updated_at))
       end
     end
 
