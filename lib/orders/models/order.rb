@@ -7,6 +7,7 @@ module Orders
 
       validates :total_payment, numericality: { greater_than: 0 }
       validates :shipping_method, length: { minimum: 1, allow_nil: true }
+      validates :payment_method, length: { minimum: 1, allow_nil: true }
 
       private
 
