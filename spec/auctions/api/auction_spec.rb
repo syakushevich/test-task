@@ -44,4 +44,43 @@ RSpec.describe Auctions::Api::Auction do
       end
     end
   end
+
+  describe ".place_bid" do
+    context "when valid params given" do
+      it "places a bid for an auction" do
+        bid_params = Auctions::Api::Dto::BidParams.new(
+          amount: 545.5,
+          bidder_id: 31,
+          auction_id: 75
+        )
+
+        result = described_class.place_bid(bid_params)
+
+        expect(result).to be_success
+        expect(result.value!.to_h).to match(
+          bid_params.to_h.merge(
+            id: kind_of(Integer)
+          )
+        )
+      end
+    end
+
+    context "when 0 amount given" do
+      it "returns a failure" do
+        bid_params = Auctions::Api::Dto::BidParams.new(
+          amount: 0.0,
+          bidder_id: 31,
+          auction_id: 75
+        )
+
+        result = described_class.place_bid(bid_params)
+
+        expect(result).to be_failure
+        expect(result.failure).to eq(
+          code: :bid_not_created,
+          details: { amount: ["must be greater than 0"] }
+        )
+      end
+    end
+  end
 end

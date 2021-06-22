@@ -10,6 +10,13 @@ module Auctions
         def create(auction_params)
           ::Auctions::Actions::Create.call(params: auction_params)
         end
+
+        # @param bid_params [Auctions::Api::DTO::BidParams] Params for the new bid
+        # @return [Dry::Monads::Result<Auctions::Api::DTO::Bid, Failure>] Bid as Dto in case of success,
+        # or a Failure object
+        def place_bid(bid_params)
+          ::Auctions::Actions::CreateBid.call(params: bid_params)
+        end
       end
     end
   end

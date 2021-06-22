@@ -3,6 +3,8 @@
 module Auctions
   module Models
     class Auction < ActiveRecord::Base
+      has_many :bids
+
       before_create :set_initial_status
 
       validate :validate_finishes_in_future, on: :create
