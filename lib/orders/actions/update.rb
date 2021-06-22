@@ -42,7 +42,7 @@ module Orders
         if order.status.eql?("shipped")
           Failure({ code: :order_not_updated, details: { base: ["can't update shipped order"] } })
         else
-          Success(order)
+          Success()
         end
       end
 
@@ -50,7 +50,7 @@ module Orders
         order.update(update_params)
 
         if order.errors.empty?
-          Success(order)
+          Success()
         else
           Failure({ code: :order_not_updated, details: order.errors.to_hash })
         end
