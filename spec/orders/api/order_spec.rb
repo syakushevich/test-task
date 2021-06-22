@@ -87,6 +87,25 @@ RSpec.describe Orders::Api::Order do
         )
       end
     end
+
+    context "when order is shipped" do
+      it "returns a failure" do
+        order = Orders::Models::Order.create(
+          auction_id: 43,
+          total_payment: 1500.0
+        )
+
+        order.update(status: "shipped")
+
+        result = described_class.update_payment_method(order.id, "Stripe")
+
+        expect(result).to be_failure
+        expect(result.failure).to eq(
+          code: :order_not_updated,
+          details: { base: ["can't update shipped order"] }
+        )
+      end
+    end
   end
 
   describe ".update_payment_method" do
@@ -134,6 +153,25 @@ RSpec.describe Orders::Api::Order do
         expect(result).to be_failure
         expect(result.failure).to eq(
           code: :order_not_found
+        )
+      end
+    end
+
+    context "when order is shipped" do
+      it "returns a failure" do
+        order = Orders::Models::Order.create(
+          auction_id: 43,
+          total_payment: 1500.0
+        )
+
+        order.update(status: "shipped")
+
+        result = described_class.update_payment_method(order.id, "Stripe")
+
+        expect(result).to be_failure
+        expect(result.failure).to eq(
+          code: :order_not_updated,
+          details: { base: ["can't update shipped order"] }
         )
       end
     end

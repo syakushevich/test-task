@@ -22,6 +22,7 @@ module Orders
 
       def call
         order = yield fetch_order
+        yield validate_order_status(order)
         yield update(order)
 
         Success(Orders::Api::Dto::Order.from_active_record(order))
@@ -35,6 +36,14 @@ module Orders
         order = Orders::Models::Order.find_by(id: order_id)
 
         order ? Success(order) : Failure({ code: :order_not_found })
+      end
+
+      def validate_order_status(order)
+        if order.status.eql?("shipped")
+          Failure({ code: :order_not_updated, details: { base: ["can't update shipped order"] } })
+        else
+          Success(order)
+        end
       end
 
       def update(order)
