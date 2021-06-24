@@ -19,6 +19,12 @@ rake db:migrate
 rake db:migrate APP_ENV=test
 ```
 
+To load the seeds:
+
+```
+ruby bin/seed.rb
+```
+
 To explore the modules available here you can use - `bin/console`
 
 To run specs run:
