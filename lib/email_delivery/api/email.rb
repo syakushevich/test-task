@@ -3,9 +3,6 @@
 module EmailDelivery
   module Api
     class Email
-      def deliver(_email_address, _subject, _content)
-        sleep(5)
-      end
       class << self
         # @param email_address [String] Email address for the message
         # @param subject [String] Subject of the message
