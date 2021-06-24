@@ -11,6 +11,8 @@ end
 loading_paths = ["lib"]
 
 loader = Zeitwerk::Loader.new
+loader.inflector.inflect "dto" => "DTO"
+
 loading_paths.each { |path| loader.push_dir(path) }
 
 if ENV["APP_ENV"] == "production"

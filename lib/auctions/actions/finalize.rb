@@ -25,7 +25,7 @@ module Auctions
         closed_auction = yield close(auction)
         yield create_order.call(order_params(closed_auction))
 
-        Success(Auctions::Api::Dto::Auction.new(closed_auction.attributes.symbolize_keys))
+        Success(Auctions::Api::DTO::Auction.new(closed_auction.attributes.symbolize_keys))
       end
 
       private

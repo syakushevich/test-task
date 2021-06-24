@@ -19,7 +19,7 @@ module Users
         user = Users::Models::User.find_by(id: user_id)
 
         if user
-          Success(Users::Api::Dto::User.new(user.attributes.symbolize_keys))
+          Success(Users::Api::DTO::User.new(user.attributes.symbolize_keys))
         else
           Failure({ code: :user_not_found })
         end

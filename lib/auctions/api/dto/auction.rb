@@ -2,7 +2,7 @@
 
 module Auctions
   module Api
-    module Dto
+    module DTO
       class Auction < Dry::Struct
         attribute :id, Types::UUID
         attribute :name, Types::String

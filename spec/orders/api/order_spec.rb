@@ -2,7 +2,7 @@ RSpec.describe Orders::Api::Order do
   describe ".create" do
     context "when valid params given" do
       it "creates the order" do
-        order_params = Orders::Api::Dto::OrderParams.new(
+        order_params = Orders::Api::DTO::OrderParams.new(
           auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 462.65
         )
@@ -23,7 +23,7 @@ RSpec.describe Orders::Api::Order do
 
     context "when 0 amount given" do
       it "returns a failure" do
-        order_params = Orders::Api::Dto::OrderParams.new(
+        order_params = Orders::Api::DTO::OrderParams.new(
           auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 0.0
         )

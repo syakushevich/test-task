@@ -2,7 +2,7 @@
 
 module Orders
   module Api
-    module Dto
+    module DTO
       class Order < Dry::Struct
         attribute :id, Types::UUID
         attribute :auction_id, Types::UUID

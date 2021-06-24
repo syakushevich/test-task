@@ -2,7 +2,7 @@
 
 module Auctions
   module Api
-    module Dto
+    module DTO
       class BidParams < Dry::Struct
         attribute :bidder_id, Types::UUID
         attribute :auction_id, Types::UUID

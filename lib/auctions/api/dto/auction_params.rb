@@ -2,7 +2,7 @@
 
 module Auctions
   module Api
-    module Dto
+    module DTO
       class AuctionParams < Dry::Struct
         attribute :name, Types::String
         attribute :description, Types::String.optional.default(nil)

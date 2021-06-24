@@ -1,7 +1,7 @@
 RSpec.describe Auctions::Api::Auction do
   describe ".create" do
     def prepare_auction_params(finishes_at: Time.now.utc + 1.day)
-      Auctions::Api::Dto::AuctionParams.new(
+      Auctions::Api::DTO::AuctionParams.new(
         name: "Leonardo da Vinci's pencil",
         creator_id: "e155fe2c-c588-4320-8acf-a1ff0d82190b",
         description: "An artifact from renaissance, used by the genius inventor and designer",
@@ -48,7 +48,7 @@ RSpec.describe Auctions::Api::Auction do
   describe ".place_bid" do
     context "when valid params given" do
       it "places a bid for an auction" do
-        bid_params = Auctions::Api::Dto::BidParams.new(
+        bid_params = Auctions::Api::DTO::BidParams.new(
           amount: 545.5,
           bidder_id: "2eca52ab-6710-4261-8c75-9574b2d22689",
           auction_id: "f458b10c-99e1-42ec-abda-77d0b9917936"
@@ -67,7 +67,7 @@ RSpec.describe Auctions::Api::Auction do
 
     context "when 0 amount given" do
       it "returns a failure" do
-        bid_params = Auctions::Api::Dto::BidParams.new(
+        bid_params = Auctions::Api::DTO::BidParams.new(
           amount: 0.0,
           bidder_id: "2eca52ab-6710-4261-8c75-9574b2d22689",
           auction_id: "f458b10c-99e1-42ec-abda-77d0b9917936"
