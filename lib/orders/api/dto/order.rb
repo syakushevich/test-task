@@ -10,12 +10,6 @@ module Orders
         attribute :shipping_method, Types::String.optional.default(nil)
         attribute :payment_method, Types::String.optional.default(nil)
         attribute :status, Types::String
-
-        class << self
-          def from_active_record(record)
-            new(record.attributes.symbolize_keys)
-          end
-        end
       end
     end
   end

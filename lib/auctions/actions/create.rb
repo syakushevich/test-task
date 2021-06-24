@@ -19,7 +19,7 @@ module Auctions
         auction = Auctions::Models::Auction.create(params.to_h)
 
         if auction.errors.empty?
-          Success(Auctions::Api::Dto::Auction.from_active_record(auction))
+          Success(Auctions::Api::Dto::Auction.new(auction.attributes.symbolize_keys))
         else
           Failure({ code: :auction_not_created, details: auction.errors.to_hash })
         end

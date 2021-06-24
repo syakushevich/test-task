@@ -25,7 +25,7 @@ module Orders
         yield validate_order_status(order)
         yield update(order)
 
-        Success(Orders::Api::Dto::Order.from_active_record(order))
+        Success(Orders::Api::Dto::Order.new(order.attributes.symbolize_keys))
       end
 
       private

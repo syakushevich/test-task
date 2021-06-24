@@ -8,12 +8,6 @@ module Auctions
         attribute :bidder_id, Types::Integer
         attribute :auction_id, Types::Integer
         attribute :amount, Types::Float
-
-        class << self
-          def from_active_record(record)
-            new(record.attributes.symbolize_keys)
-          end
-        end
       end
     end
   end

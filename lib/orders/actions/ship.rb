@@ -23,7 +23,7 @@ module Orders
         yield validate_complete_order(order)
         yield ship(order)
 
-        Success(Orders::Api::Dto::Order.from_active_record(order))
+        Success(Orders::Api::Dto::Order.new(order.attributes.symbolize_keys))
       end
 
       private

@@ -19,7 +19,7 @@ module Auctions
         bid = Auctions::Models::Bid.create(params.to_h)
 
         if bid.errors.empty?
-          Success(Auctions::Api::Dto::Bid.from_active_record(bid))
+          Success(Auctions::Api::Dto::Bid.new(bid.attributes.symbolize_keys))
         else
           Failure({ code: :bid_not_created, details: bid.errors.to_hash })
         end

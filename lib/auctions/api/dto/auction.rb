@@ -15,12 +15,6 @@ module Auctions
         attribute :finishes_at, Types::Time
         attribute :status, Types::String
         attribute :winner_id, Types::Integer.optional.default(nil)
-
-        class << self
-          def from_active_record(record)
-            new(record.attributes.symbolize_keys)
-          end
-        end
       end
     end
   end
