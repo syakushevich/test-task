@@ -10,6 +10,7 @@ gem "listen", "~> 3.5.1"
 gem "pg", "~> 1.2.3"
 gem "pry", "~> 0.14.1"
 gem "rake", "~> 13.0.3"
+gem "sidekiq", "~> 6.2.1"
 gem "zeitwerk", "~> 2.4.2"
 
 group :test do
