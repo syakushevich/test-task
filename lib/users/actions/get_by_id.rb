@@ -19,7 +19,6 @@ module Users
         user = Users::Models::User.find_by(id: user_id)
 
         if user
-          # TODO: Use DTO
           Success(Users::Api::Dto::User.from_active_record(user))
         else
           Failure({ code: :user_not_found })
