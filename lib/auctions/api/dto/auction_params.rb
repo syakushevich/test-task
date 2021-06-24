@@ -6,7 +6,7 @@ module Auctions
       class AuctionParams < Dry::Struct
         attribute :name, Types::String
         attribute :description, Types::String.optional.default(nil)
-        attribute :creator_id, Types::Integer
+        attribute :creator_id, Types::UUID
         attribute :package_weight, Types::Float
         attribute :package_size_x, Types::Float
         attribute :package_size_y, Types::Float

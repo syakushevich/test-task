@@ -3,6 +3,8 @@
 module Orders
   module Models
     class Order < ActiveRecord::Base
+      self.implicit_order_column = :created_at
+
       before_create :set_initial_status
 
       validates :total_payment, numericality: { greater_than: 0 }

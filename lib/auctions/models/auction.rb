@@ -3,6 +3,8 @@
 module Auctions
   module Models
     class Auction < ActiveRecord::Base
+      self.implicit_order_column = :created_at
+
       has_many :bids
 
       before_create :set_initial_status

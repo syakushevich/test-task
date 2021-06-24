@@ -4,8 +4,8 @@ module Orders
   module Api
     module Dto
       class Order < Dry::Struct
-        attribute :id, Types::Integer
-        attribute :auction_id, Types::Integer
+        attribute :id, Types::UUID
+        attribute :auction_id, Types::UUID
         attribute :total_payment, Types::Decimal | Types::Float
         attribute :shipping_method, Types::String.optional.default(nil)
         attribute :payment_method, Types::String.optional.default(nil)

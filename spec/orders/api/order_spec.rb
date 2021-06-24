@@ -3,7 +3,7 @@ RSpec.describe Orders::Api::Order do
     context "when valid params given" do
       it "creates the order" do
         order_params = Orders::Api::Dto::OrderParams.new(
-          auction_id: 78,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 462.65
         )
 
@@ -12,7 +12,7 @@ RSpec.describe Orders::Api::Order do
         expect(result).to be_success
         expect(result.value!.to_h).to match(
           order_params.to_h.merge(
-            id: kind_of(Integer),
+            id: kind_of(String),
             status: "draft",
             payment_method: nil,
             shipping_method: nil
@@ -24,7 +24,7 @@ RSpec.describe Orders::Api::Order do
     context "when 0 amount given" do
       it "returns a failure" do
         order_params = Orders::Api::Dto::OrderParams.new(
-          auction_id: 78,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 0.0
         )
 
@@ -43,7 +43,7 @@ RSpec.describe Orders::Api::Order do
     context "when value given" do
       it "updates the order" do
         order = Orders::Models::Order.create(
-          auction_id: 43,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 1500.0
         )
 
@@ -63,7 +63,7 @@ RSpec.describe Orders::Api::Order do
     context "when blank value given" do
       it "returns a failure" do
         order = Orders::Models::Order.create(
-          auction_id: 43,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 1500.0
         )
 
@@ -91,7 +91,7 @@ RSpec.describe Orders::Api::Order do
     context "when order is shipped" do
       it "returns a failure" do
         order = Orders::Models::Order.create(
-          auction_id: 43,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 1500.0
         )
 
@@ -112,7 +112,7 @@ RSpec.describe Orders::Api::Order do
     context "when value given" do
       it "updates the order" do
         order = Orders::Models::Order.create(
-          auction_id: 43,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 1500.0
         )
 
@@ -132,7 +132,7 @@ RSpec.describe Orders::Api::Order do
     context "when blank value given" do
       it "returns a failure" do
         order = Orders::Models::Order.create(
-          auction_id: 43,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 1500.0
         )
 
@@ -160,7 +160,7 @@ RSpec.describe Orders::Api::Order do
     context "when order is shipped" do
       it "returns a failure" do
         order = Orders::Models::Order.create(
-          auction_id: 43,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 1500.0
         )
 
@@ -181,7 +181,7 @@ RSpec.describe Orders::Api::Order do
     context "when order has shipping_method and payment_method set" do
       it "ships the order" do
         order = Orders::Models::Order.create(
-          auction_id: 43,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 1500.0,
           shipping_method: "AirForce One",
           payment_method: "gold"
@@ -203,7 +203,7 @@ RSpec.describe Orders::Api::Order do
     context "when order has no shipping_method" do
       it "returns a failure with info about missing field" do
         order = Orders::Models::Order.create(
-          auction_id: 43,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 1500.0,
           payment_method: "gold"
         )
@@ -221,7 +221,7 @@ RSpec.describe Orders::Api::Order do
     context "when order has no payment_method" do
       it "returns a failure with info about missing field" do
         order = Orders::Models::Order.create(
-          auction_id: 43,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 1500.0,
           shipping_method: "AirForce One"
         )
@@ -239,7 +239,7 @@ RSpec.describe Orders::Api::Order do
     context "when some invalid data present on the order" do
       it "returns a failure with info about the error" do
         order = Orders::Models::Order.create(
-          auction_id: 43,
+          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
           total_payment: 1500.0,
           shipping_method: "AirForce One",
           payment_method: "gold"

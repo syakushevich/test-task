@@ -13,9 +13,10 @@
 ActiveRecord::Schema.define(version: 0) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "auctions", force: :cascade do |t|
+  create_table "auctions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.string "status"
@@ -23,8 +24,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.float "package_size_x"
     t.float "package_size_y"
     t.float "package_size_z"
-    t.bigint "creator_id", null: false
-    t.bigint "winner_id"
+    t.uuid "creator_id", null: false
+    t.uuid "winner_id"
     t.datetime "finishes_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -32,9 +33,9 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["winner_id"], name: "index_auctions_on_winner_id"
   end
 
-  create_table "bids", force: :cascade do |t|
-    t.bigint "bidder_id"
-    t.bigint "auction_id"
+  create_table "bids", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "bidder_id"
+    t.uuid "auction_id"
     t.money "amount", scale: 2
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -42,8 +43,8 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["bidder_id"], name: "index_bids_on_bidder_id"
   end
 
-  create_table "orders", force: :cascade do |t|
-    t.bigint "auction_id"
+  create_table "orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "auction_id"
     t.money "total_payment", scale: 2
     t.string "shipping_method"
     t.string "payment_method"
@@ -53,7 +54,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.index ["auction_id"], name: "index_orders_on_auction_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "email", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
