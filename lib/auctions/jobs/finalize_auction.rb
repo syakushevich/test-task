@@ -6,7 +6,7 @@ module Auctions
       include Sidekiq::Worker
 
       def perform(auction_id)
-        ::Auctions::Actions::Finalize.call(auction_id: auction_id)
+        ::Auctions::Api::Auction.finalize(auction_id)
       end
     end
   end
