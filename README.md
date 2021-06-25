@@ -81,7 +81,13 @@ The code in this repository is a small extract from an auction site that allows 
 
 To run the project you need a PostgreSQL database. This repository provides database schema that can be loaded using rake task as well as some seed data to populate the database.
 
-Currently, modules support following actions to be performed:
+### Structure
+
+This is the initial structure of this repository:
+
+![Initial structure](public/devtest-initial-structure.png)
+
+As you can see, modules support following actions:
 
 - Create an auction
 - Place a bid for an auction
@@ -91,6 +97,8 @@ Currently, modules support following actions to be performed:
 - Ship the order
 
 Modules should communicate with each other via their public APIs.
+
+### Instructions
 
 Your task within the test is to implement the code that will fulfil these acceptance criteria:
 
