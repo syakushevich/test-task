@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 0) do
   end
 
   create_table "orders", id: :string, force: :cascade do |t|
+    t.string "reference_number"
     t.string "auction_id"
     t.string "buyer_id"
     t.float "total_payment"

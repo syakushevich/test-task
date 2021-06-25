@@ -16,7 +16,7 @@ module Orders
       end
 
       def call
-        order = Orders::Models::Order.create(params.to_h.merge(status: "draft"))
+        order = Orders::Models::Order.create(order_params)
 
         if order.errors.empty?
           Success(Orders::Api::DTO::Order.new(order.attributes.symbolize_keys))
@@ -28,6 +28,17 @@ module Orders
       private
 
       attr_reader :params
+
+      def order_params
+        params.to_h.merge(
+          status: "draft",
+          reference_number: generate_reference_number
+        )
+      end
+
+      def generate_reference_number
+        "#{Time.now.strftime("%y%m%d")}_#{SecureRandom.hex[..10]}"
+      end
     end
   end
 end

@@ -30,6 +30,7 @@ class InitialMigration < ActiveRecord::Migration[6.1]
     end
 
     create_table :orders, id: :string do |t|
+      t.string :reference_number
       t.references :auction, type: :string
       t.references :buyer, type: :string
       t.float :total_payment
