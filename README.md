@@ -96,8 +96,8 @@ Your task within the test is to implement the code that will fulfil these accept
 
 1. When the auction is finished, the system should send email notification using external service to the auction participants - the winner, creator and bidders:
    1. The actual call to external HTTP service should be simulated with the `sleep(5)` call,
-   2. There is no need to build an HTML template, you can assume it's done on the vendor's service,
-   3. The auction winner should receive data about the order that was created (it's `reference_number` and `total_payment`),
+   2. There is no need to build an HTML template, you can assume that it's done on the vendor's service,
+   3. The auction winner should receive data about the order that was created (its `reference_number` and `total_payment`),
    4. Other participants should receive information about the winner and the highest bid.
 2. When selecting the shipping method, a total order price should be calculated with added shipping cost:
    1. When shipping method A is selected, then the shipping price should be equal to weight rounded up to 1kg times $2,
