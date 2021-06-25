@@ -94,8 +94,14 @@ Modules should communicate with each other via their public APIs.
 
 Your task within the test is to implement the code that will fulfil these acceptance criteria:
 
-1. When the auction is finished, the system should send email notification to the winning bidder
+1. When the auction is finished, the system should send email notification using external service to the auction participants - the winner, creator and bidders:
+   1. The actual call to external HTTP service should be simulated with the `sleep(5)` call,
+   2. There is no need to build an HTML template, you can assume it's done on the vendor's service,
+   3. The auction winner should receive data about the order that was created (it's `reference_number` and `total_payment`),
+   4. Other participants should receive information about the winner and the highest bid.
 2. When selecting the shipping method, a total order price should be calculated with added shipping cost:
    1. When shipping method A is selected, then the shipping price should be equal to weight rounded up to 1kg times $2,
    2. When shipping method B is selected, when the shipping price should be equal to package volume (in m3) times an id field fetched from https://official-joke-api.appspot.com/random_joke.
-3. Add an action to Users module that would allow user to add shipping address to their data and when shipping the Order use the shipping address from the User. When the user doesn’t have one - throw an error. Shipping address should contain city, zip code and street address, all required strings.
+3. Add an action to Users module that would allow user to add shipping address to their data. Shipping address should contain city, zip code and street address, all required strings. User can have only one shipping address.
+
+   Extend the shipping action from Order module to fetch and store the shipping address for the Order from the User (buyer).
