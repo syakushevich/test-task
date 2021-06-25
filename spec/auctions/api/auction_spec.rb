@@ -228,5 +228,32 @@ RSpec.describe Auctions::Api::Auction do
         )
       end
     end
+
+    context "when error on creating_order" do
+      include ActiveSupport::Testing::TimeHelpers
+
+      it "returns a failure and does not close the auction" do
+        winner_id = SecureRandom.uuid
+        auction = prepare_auction_and_bids(winner_id)
+
+        travel_to(Time.now + 1.day + 1.minute) do
+          create_order_method = AuctionDependencies.container.resolve(:create_order)
+
+          expect(create_order_method).to receive(:call).with(
+            auction_id: auction.id,
+            buyer_id: winner_id,
+            total_payment: 75.0
+          ).and_return(Dry::Monads::Failure({ code: :order_disordered }))
+
+          result = described_class.finalize(auction.id)
+
+          expect(result).to be_failure
+          expect(result.failure).to eq(
+            code: :order_disordered
+          )
+          expect(auction.reload.status).to eq("open")
+        end
+      end
+    end
   end
 end

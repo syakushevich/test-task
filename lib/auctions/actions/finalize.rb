@@ -22,10 +22,13 @@ module Auctions
 
       def call
         auction = yield fetch_auction
-        closed_auction = yield close(auction)
-        yield create_order.call(order_params(closed_auction))
 
-        Success(Auctions::Api::DTO::Auction.new(closed_auction.attributes.symbolize_keys))
+        ActiveRecord::Base.transaction do
+          auction = yield close(auction)
+          yield create_order.call(order_params(auction))
+        end
+
+        Success(Auctions::Api::DTO::Auction.new(auction.attributes.symbolize_keys))
       end
 
       private
