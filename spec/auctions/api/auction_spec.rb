@@ -65,7 +65,8 @@ RSpec.describe Auctions::Api::Auction do
         package_size_x: 0.03,
         package_size_y: 0.005,
         package_size_z: 0.002,
-        finishes_at: Time.now + 1.day
+        finishes_at: Time.now + 1.day,
+        status: "open"
       )
     end
 
@@ -156,7 +157,8 @@ RSpec.describe Auctions::Api::Auction do
         package_size_x: 0.03,
         package_size_y: 0.005,
         package_size_z: 0.002,
-        finishes_at: Time.now + 1.day
+        finishes_at: Time.now + 1.day,
+        status: "open"
       )
       Auctions::Models::Bid.create(bidder_id: SecureRandom.uuid, auction_id: auction.id, amount: 30.0)
       Auctions::Models::Bid.create(bidder_id: winner_id, auction_id: auction.id, amount: 75.0)

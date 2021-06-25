@@ -19,6 +19,7 @@ module Auctions
       end
 
       def call
+        yield validate_finishes_in_future
         auction = yield create_auction
 
         schedule_finalizing(auction)
@@ -30,8 +31,16 @@ module Auctions
 
       attr_reader :params
 
+      def validate_finishes_in_future
+        if params[:finishes_at] > Time.now + 5.seconds
+          Success()
+        else
+          Failure({ code: :auction_not_created, details: { finishes_at: ["must be in the future"] } })
+        end
+      end
+
       def create_auction
-        auction = Auctions::Models::Auction.create(params.to_h)
+        auction = Auctions::Models::Auction.create(params.to_h.merge(status: "open"))
 
         if auction.errors.empty?
           Success(auction)

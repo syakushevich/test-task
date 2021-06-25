@@ -43,7 +43,7 @@ module Auctions
 
       def close(auction)
         if Time.now >= auction.finishes_at
-          auction.close
+          auction.status = "closed"
           auction.winner_id = highest_bidder(auction)
           auction.save
 
