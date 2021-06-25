@@ -3,7 +3,7 @@
 module Auctions
   module Models
     class Auction < ActiveRecord::Base
-      self.implicit_order_column = :created_at
+      include Shared::Concerns::Uuid
 
       has_many :bids
 

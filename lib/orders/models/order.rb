@@ -3,7 +3,7 @@
 module Orders
   module Models
     class Order < ActiveRecord::Base
-      self.implicit_order_column = :created_at
+      include Shared::Concerns::Uuid
 
       before_validation :set_initial_status
 

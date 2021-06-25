@@ -1,12 +1,8 @@
 default: &default
-  adapter: postgresql
-  encoding: unicode
+  adapter: sqlite3
   database: gat_devtest_development
-  pool: 10
-  username: root
-  password: ""
-  host: 127.0.0.1
-  port: 5432
+  pool: 5
+  timeout: 5000
 
 development:
   <<: *default
