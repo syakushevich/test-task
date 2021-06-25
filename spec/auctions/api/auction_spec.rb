@@ -28,6 +28,15 @@ RSpec.describe Auctions::Api::Auction do
           )
         )
       end
+
+      it "schedules a background job to finalize auction" do
+        auction_params = prepare_auction_params
+
+        result = described_class.create(auction_params)
+
+        expect(Auctions::Jobs::FinalizeAuction).to have_enqueued_sidekiq_job(result.value!.id)
+          .at(auction_params.finishes_at)
+      end
     end
 
     context "when finishes_at is in the past" do
