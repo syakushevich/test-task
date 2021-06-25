@@ -112,6 +112,7 @@ DEPENDENCIES
   listen (~> 3.5.1)
   pry (~> 0.14.1)
   rake (~> 13.0.3)
+  redis (~> 4.3.1)
   rspec (~> 3.10.0)
   sidekiq (~> 6.2.1)
   simplecov (~> 0.21.2)
