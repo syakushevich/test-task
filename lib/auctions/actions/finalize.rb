@@ -56,6 +56,7 @@ module Auctions
       def order_params(auction)
         {
           auction_id: auction.id,
+          buyer_id: auction.winner_id,
           total_payment: auction.bids.find_by(bidder_id: auction.winner_id).amount
         }
       end

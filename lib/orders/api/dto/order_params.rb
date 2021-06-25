@@ -5,6 +5,7 @@ module Orders
     module DTO
       class OrderParams < Dry::Struct
         attribute :auction_id, Types::UUID
+        attribute :buyer_id, Types::UUID
         attribute :total_payment, Types::Float
       end
     end

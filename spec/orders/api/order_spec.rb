@@ -1,11 +1,16 @@
 RSpec.describe Orders::Api::Order do
+  def prepare_order_params(total_payment = 1500.0)
+    {
+      auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
+      buyer_id: "b8c9ad09-084f-4c39-9b94-944e12efc736",
+      total_payment: total_payment
+    }
+  end
+
   describe ".create" do
     context "when valid params given" do
       it "creates the order" do
-        order_params = Orders::Api::DTO::OrderParams.new(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 462.65
-        )
+        order_params = Orders::Api::DTO::OrderParams.new(prepare_order_params)
 
         result = described_class.create(order_params)
 
@@ -23,10 +28,7 @@ RSpec.describe Orders::Api::Order do
 
     context "when 0 amount given" do
       it "returns a failure" do
-        order_params = Orders::Api::DTO::OrderParams.new(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 0.0
-        )
+        order_params = Orders::Api::DTO::OrderParams.new(prepare_order_params(0.0))
 
         result = described_class.create(order_params)
 
@@ -42,10 +44,7 @@ RSpec.describe Orders::Api::Order do
   describe ".update_shipping_method" do
     context "when value given" do
       it "updates the order" do
-        order = Orders::Models::Order.create(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 1500.0
-        )
+        order = Orders::Models::Order.create(prepare_order_params)
 
         result = described_class.update_shipping_method(order.id, "Fedex Overnight")
 
@@ -62,10 +61,7 @@ RSpec.describe Orders::Api::Order do
 
     context "when blank value given" do
       it "returns a failure" do
-        order = Orders::Models::Order.create(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 1500.0
-        )
+        order = Orders::Models::Order.create(prepare_order_params)
 
         result = described_class.update_shipping_method(order.id, "")
 
@@ -90,10 +86,7 @@ RSpec.describe Orders::Api::Order do
 
     context "when order is shipped" do
       it "returns a failure" do
-        order = Orders::Models::Order.create(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 1500.0
-        )
+        order = Orders::Models::Order.create(prepare_order_params)
 
         order.update(status: "shipped")
 
@@ -111,10 +104,7 @@ RSpec.describe Orders::Api::Order do
   describe ".update_payment_method" do
     context "when value given" do
       it "updates the order" do
-        order = Orders::Models::Order.create(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 1500.0
-        )
+        order = Orders::Models::Order.create(prepare_order_params)
 
         result = described_class.update_payment_method(order.id, "Stripe")
 
@@ -131,10 +121,7 @@ RSpec.describe Orders::Api::Order do
 
     context "when blank value given" do
       it "returns a failure" do
-        order = Orders::Models::Order.create(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 1500.0
-        )
+        order = Orders::Models::Order.create(prepare_order_params)
 
         result = described_class.update_payment_method(order.id, "")
 
@@ -159,10 +146,7 @@ RSpec.describe Orders::Api::Order do
 
     context "when order is shipped" do
       it "returns a failure" do
-        order = Orders::Models::Order.create(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 1500.0
-        )
+        order = Orders::Models::Order.create(prepare_order_params)
 
         order.update(status: "shipped")
 
@@ -181,10 +165,10 @@ RSpec.describe Orders::Api::Order do
     context "when order has shipping_method and payment_method set" do
       it "ships the order" do
         order = Orders::Models::Order.create(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 1500.0,
-          shipping_method: "AirForce One",
-          payment_method: "gold"
+          prepare_order_params.merge(
+            shipping_method: "AirForce One",
+            payment_method: "gold"
+          )
         )
 
         result = described_class.ship(order.id)
@@ -203,9 +187,9 @@ RSpec.describe Orders::Api::Order do
     context "when order has no shipping_method" do
       it "returns a failure with info about missing field" do
         order = Orders::Models::Order.create(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 1500.0,
-          payment_method: "gold"
+          prepare_order_params.merge(
+            payment_method: "gold"
+          )
         )
 
         result = described_class.ship(order.id)
@@ -221,9 +205,9 @@ RSpec.describe Orders::Api::Order do
     context "when order has no payment_method" do
       it "returns a failure with info about missing field" do
         order = Orders::Models::Order.create(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 1500.0,
-          shipping_method: "AirForce One"
+          prepare_order_params.merge(
+            shipping_method: "AirForce One"
+          )
         )
 
         result = described_class.ship(order.id)
@@ -239,10 +223,10 @@ RSpec.describe Orders::Api::Order do
     context "when some invalid data present on the order" do
       it "returns a failure with info about the error" do
         order = Orders::Models::Order.create(
-          auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
-          total_payment: 1500.0,
-          shipping_method: "AirForce One",
-          payment_method: "gold"
+          prepare_order_params.merge(
+            shipping_method: "AirForce One",
+            payment_method: "gold"
+          )
         )
 
         order.update_column(:total_payment, -100)

@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 0) do
 
   create_table "orders", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "auction_id"
+    t.uuid "buyer_id"
     t.money "total_payment", scale: 2
     t.string "shipping_method"
     t.string "payment_method"
@@ -52,6 +53,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["auction_id"], name: "index_orders_on_auction_id"
+    t.index ["buyer_id"], name: "index_orders_on_buyer_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

@@ -33,6 +33,7 @@ class InitialMigration < ActiveRecord::Migration[6.1]
 
     create_table :orders, id: :uuid, default: -> { "gen_random_uuid()" } do |t|
       t.references :auction, type: :uuid
+      t.references :buyer, type: :uuid
       t.money :total_payment
       t.string :shipping_method
       t.string :payment_method
