@@ -44,7 +44,7 @@ RSpec.describe Orders::Api::Order do
   describe ".update_shipping_method" do
     context "when value given" do
       it "updates the order" do
-        order = Orders::Models::Order.create(prepare_order_params)
+        order = Orders::Models::Order.create(prepare_order_params.merge(status: "draft"))
 
         result = described_class.update_shipping_method(order.id, "Fedex Overnight")
 
@@ -61,7 +61,7 @@ RSpec.describe Orders::Api::Order do
 
     context "when blank value given" do
       it "returns a failure" do
-        order = Orders::Models::Order.create(prepare_order_params)
+        order = Orders::Models::Order.create(prepare_order_params.merge(status: "draft"))
 
         result = described_class.update_shipping_method(order.id, "")
 
@@ -86,7 +86,7 @@ RSpec.describe Orders::Api::Order do
 
     context "when order is shipped" do
       it "returns a failure" do
-        order = Orders::Models::Order.create(prepare_order_params)
+        order = Orders::Models::Order.create(prepare_order_params.merge(status: "draft"))
 
         order.update(status: "shipped")
 
@@ -104,7 +104,7 @@ RSpec.describe Orders::Api::Order do
   describe ".update_payment_method" do
     context "when value given" do
       it "updates the order" do
-        order = Orders::Models::Order.create(prepare_order_params)
+        order = Orders::Models::Order.create(prepare_order_params.merge(status: "draft"))
 
         result = described_class.update_payment_method(order.id, "Stripe")
 
@@ -121,7 +121,7 @@ RSpec.describe Orders::Api::Order do
 
     context "when blank value given" do
       it "returns a failure" do
-        order = Orders::Models::Order.create(prepare_order_params)
+        order = Orders::Models::Order.create(prepare_order_params.merge(status: "draft"))
 
         result = described_class.update_payment_method(order.id, "")
 
@@ -146,7 +146,7 @@ RSpec.describe Orders::Api::Order do
 
     context "when order is shipped" do
       it "returns a failure" do
-        order = Orders::Models::Order.create(prepare_order_params)
+        order = Orders::Models::Order.create(prepare_order_params.merge(status: "draft"))
 
         order.update(status: "shipped")
 
@@ -166,6 +166,7 @@ RSpec.describe Orders::Api::Order do
       it "ships the order" do
         order = Orders::Models::Order.create(
           prepare_order_params.merge(
+            status: "draft",
             shipping_method: "AirForce One",
             payment_method: "gold"
           )
@@ -188,6 +189,7 @@ RSpec.describe Orders::Api::Order do
       it "returns a failure with info about missing field" do
         order = Orders::Models::Order.create(
           prepare_order_params.merge(
+            status: "draft",
             payment_method: "gold"
           )
         )
@@ -206,6 +208,7 @@ RSpec.describe Orders::Api::Order do
       it "returns a failure with info about missing field" do
         order = Orders::Models::Order.create(
           prepare_order_params.merge(
+            status: "draft",
             shipping_method: "AirForce One"
           )
         )
@@ -224,6 +227,7 @@ RSpec.describe Orders::Api::Order do
       it "returns a failure with info about the error" do
         order = Orders::Models::Order.create(
           prepare_order_params.merge(
+            status: "draft",
             shipping_method: "AirForce One",
             payment_method: "gold"
           )

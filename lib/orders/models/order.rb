@@ -5,22 +5,10 @@ module Orders
     class Order < ActiveRecord::Base
       include Shared::Concerns::Uuid
 
-      before_validation :set_initial_status
-
       validates :total_payment, numericality: { greater_than: 0 }
       validates :shipping_method, length: { minimum: 1, allow_nil: true }
       validates :payment_method, length: { minimum: 1, allow_nil: true }
       validates :status, inclusion: { in: Orders::Api::DTO::Order::Status.values }
-
-      def ship
-        self.status = "shipped"
-      end
-
-      private
-
-      def set_initial_status
-        self.status ||= "draft"
-      end
     end
   end
 end

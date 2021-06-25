@@ -50,7 +50,7 @@ module Orders
       end
 
       def ship(order)
-        order.ship
+        order.status = "shipped"
         order.save
 
         if order.errors.empty?

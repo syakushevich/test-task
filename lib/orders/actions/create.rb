@@ -16,7 +16,7 @@ module Orders
       end
 
       def call
-        order = Orders::Models::Order.create(params.to_h)
+        order = Orders::Models::Order.create(params.to_h.merge(status: "draft"))
 
         if order.errors.empty?
           Success(Orders::Api::DTO::Order.new(order.attributes.symbolize_keys))
