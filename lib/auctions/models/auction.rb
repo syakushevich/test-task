@@ -13,7 +13,6 @@ module Auctions
 
       def close
         self.status = "closed"
-        self.winner_id = bids.where("amount = (:max)", max: bids.select("max(amount)")).first.bidder_id
       end
 
       private

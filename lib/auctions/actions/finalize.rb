@@ -41,6 +41,7 @@ module Auctions
       def close(auction)
         if Time.now >= auction.finishes_at
           auction.close
+          auction.winner_id = highest_bidder(auction)
           auction.save
 
           auction.errors.empty? ? Success(auction) : Failure(failure_details(auction))
@@ -59,6 +60,10 @@ module Auctions
           buyer_id: auction.winner_id,
           total_payment: auction.bids.find_by(bidder_id: auction.winner_id).amount
         }
+      end
+
+      def highest_bidder(auction)
+        auction.bids.where("amount = (:max)", max: auction.bids.select("max(amount)")).first.bidder_id
       end
     end
   end
