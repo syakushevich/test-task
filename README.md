@@ -5,11 +5,15 @@
 This scaffold was created using Ruby 3.0. It is not a fully working application and was designed as a collection of modules
 that can be injected into other applications.
 
+### Dependencies
+
 To install dependencies:
 
 ```
 bundle install
 ```
+
+### Database
 
 To initialize the database:
 
@@ -25,7 +29,21 @@ To load the seeds:
 ruby bin/seed.rb
 ```
 
-To explore the modules available here you can use - `bin/console`
+To remove the databases for the scaffold:
+
+```
+rake db:drop
+```
+
+### Console
+
+To explore the modules available here you can use
+
+```
+bin/console
+```
+
+### Specs
 
 To run specs run:
 
@@ -33,10 +51,12 @@ To run specs run:
 rspec
 ```
 
-To remove the databases for the scaffold:
+### Background jobs
+
+To run background jobs (using sidekiq and Redis):
 
 ```
-rake db:drop
+bin/sidekiq
 ```
 
 ## Context
