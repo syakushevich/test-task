@@ -4,6 +4,8 @@ module Orders
   module Api
     module DTO
       class Order < Dry::Struct
+        Status = Types::String.enum("draft", "shipped")
+
         attribute :id, Types::UUID
         attribute :auction_id, Types::UUID
         attribute :buyer_id, Types::UUID

@@ -4,6 +4,8 @@ module Auctions
   module Api
     module DTO
       class Auction < Dry::Struct
+        Status = Types::String.enum("open", "closed")
+
         attribute :id, Types::UUID
         attribute :name, Types::String
         attribute :description, Types::String.optional.default(nil)

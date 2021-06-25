@@ -7,8 +7,9 @@ module Auctions
 
       has_many :bids
 
-      before_create :set_initial_status
+      before_validation :set_initial_status
 
+      validates :status, inclusion: { in: Auctions::Api::DTO::Auction::Status.values }
       validate :validate_finishes_in_future, on: :create
 
       def close
@@ -18,7 +19,7 @@ module Auctions
       private
 
       def set_initial_status
-        self.status = "open"
+        self.status ||= "open"
       end
 
       def validate_finishes_in_future

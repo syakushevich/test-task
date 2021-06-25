@@ -5,11 +5,12 @@ module Orders
     class Order < ActiveRecord::Base
       self.implicit_order_column = :created_at
 
-      before_create :set_initial_status
+      before_validation :set_initial_status
 
       validates :total_payment, numericality: { greater_than: 0 }
       validates :shipping_method, length: { minimum: 1, allow_nil: true }
       validates :payment_method, length: { minimum: 1, allow_nil: true }
+      validates :status, inclusion: { in: Orders::Api::DTO::Order::Status.values }
 
       def ship
         self.status = "shipped"
@@ -18,7 +19,7 @@ module Orders
       private
 
       def set_initial_status
-        self.status = "draft"
+        self.status ||= "draft"
       end
     end
   end
