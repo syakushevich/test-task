@@ -103,7 +103,7 @@ Modules should communicate with each other via their public APIs.
 Your task within the test is to implement the code that will fulfil these acceptance criteria:
 
 1. When the auction is finished, the system should send email notification using external service to the auction participants - the winner and bidders:
-   1. The actual call to external email service is simulated with the `sleep(5)` call in the `EmailDelivery` module (there is **no need** to call any email service nor send via SMPT),
+   1. The actual call to external email service is simulated with the `sleep(5)` call in the `EmailDelivery` module (there is **no need** to call any email service nor send via SMTP),
    2. There is no need to build an HTML template or email content, you can assume that it's done on the vendor's service (it only needs template variables),
    3. The auction winner should receive data about the order that was created (its `reference_number` and `total_payment`),
    4. Other participants should receive information about the highest bid.
