@@ -6,9 +6,9 @@ module EmailDelivery
       class << self
         # @param email_address [String] Email address for the message
         # @param subject [String] Subject of the message
-        # @param content [String] Body of the message
-        def deliver(email_address, subject, content)
-          ::EmailDelivery::Actions::Deliver.call(email_address: email_address, subject: subject, content: content)
+        # @param variables [Hash] Variables to be used in the template (f.e. name, shipping_address)
+        def deliver(email_address, subject, variables)
+          ::EmailDelivery::Actions::Deliver.call(email_address: email_address, subject: subject, variables: variables)
         end
       end
     end
