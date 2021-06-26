@@ -9,10 +9,10 @@ module EmailDelivery
         end
       end
 
-      def initialize(email_address:, subject:, content:)
+      def initialize(email_address:, subject:, variables:)
         @email_address = email_address
         @subject = subject
-        @content = content
+        @variables = variables
       end
 
       # Temporarily simulating an expensive email delivery action
@@ -22,7 +22,7 @@ module EmailDelivery
 
       private
 
-      attr_reader :email_address, :subject, :content
+      attr_reader :email_address, :subject, :variables
     end
   end
 end
