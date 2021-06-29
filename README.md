@@ -61,19 +61,18 @@ bin/sidekiq
 
 ## Context
 
-This test is not about solving a problem. It's about execution and checking what's your default way of thinking and coding habits.
+This test is not about solving a problem. It's about execution and checking what's your default way of thinking and coding/collaboration habits.
 If you want to install any gems that can help you with solving the task, you are free to do so.
 
 ## General instructions
 
 1. Fork this repository
 2. All your changes should be made in a private fork of this repository.
-3. All your changes should be made on a branch that is separate from master
+3. All your changes should be made on a branch that is separate from `main` (create a new branch in your fork)
 4. When you're done, please, please:
 
-- Create a Merge Request in your repository from the branch with changes to your master branch
-- Share your fork with the @wojteko user (Settings -> Members -> Share with Member)
-- Make sure that you grant the user the Reporter role so that our reviewers can check out the code using Git.
+- Create a Pull Request in your repository from the branch with changes to **your** `main` branch
+- Invite `@gat-developer` user as a repository collaborator (on the repository page: Settings -> Manage access -> Invite teams or people) with `Read` role, so that our reviewers can check out the code using Git.
 
 ## Description
 
