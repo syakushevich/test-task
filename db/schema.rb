@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 0) do
   create_table "bids", id: :string, force: :cascade do |t|
     t.string "bidder_id"
     t.string "auction_id"
-    t.float "amount"
+    t.decimal "amount", precision: 10, scale: 2
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["auction_id"], name: "index_bids_on_auction_id"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.string "reference_number"
     t.string "auction_id"
     t.string "buyer_id"
-    t.float "total_payment"
+    t.decimal "total_payment", precision: 10, scale: 2
     t.string "shipping_method"
     t.string "payment_method"
     t.string "status"
