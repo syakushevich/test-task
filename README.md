@@ -78,7 +78,7 @@ If you want to install any gems that can help you with solving the task, you are
 
 The code in this repository is a small extract from an auction site that allows users to create auctions, bid on them, and in the end redeem won items. Code is independent of the delivery mechanisms like HTTP and only operates as a set of ruby modules that could be plugged in into different frameworks.
 
-To run the project you need a PostgreSQL database. This repository provides database schema that can be loaded using rake task as well as some seed data to populate the database.
+This repository provides database schema that can be loaded using rake task as well as some seed data to populate the database.
 
 ### Structure
 
