@@ -24,7 +24,7 @@ class InitialMigration < ActiveRecord::Migration[6.1]
     create_table :bids, id: :string do |t|
       t.references :bidder, type: :string
       t.references :auction, type: :string
-      t.float :amount
+      t.decimal :amount, precision: 10, scale: 2
 
       t.timestamps
     end
@@ -33,7 +33,7 @@ class InitialMigration < ActiveRecord::Migration[6.1]
       t.string :reference_number
       t.references :auction, type: :string
       t.references :buyer, type: :string
-      t.float :total_payment
+      t.decimal :total_payment, precision: 10, scale: 2
       t.string :shipping_method
       t.string :payment_method
       t.string :status
