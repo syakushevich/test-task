@@ -66,7 +66,7 @@ module Auctions
       end
 
       def highest_bidder(auction)
-        auction.bids.where("amount = (:max)", max: auction.bids.select("max(amount)")).first.bidder_id
+        auction.bids.order("amount desc").first.bidder_id
       end
     end
   end

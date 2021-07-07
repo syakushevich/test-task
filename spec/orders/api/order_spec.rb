@@ -1,5 +1,5 @@
 RSpec.describe Orders::Api::Order do
-  def prepare_order_params(total_payment = 1500.0)
+  def prepare_order_params(total_payment = BigDecimal("1500.0"))
     {
       auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
       buyer_id: "b8c9ad09-084f-4c39-9b94-944e12efc736",
@@ -29,7 +29,7 @@ RSpec.describe Orders::Api::Order do
 
     context "when 0 amount given" do
       it "returns a failure" do
-        order_params = Orders::Api::DTO::OrderParams.new(prepare_order_params(0.0))
+        order_params = Orders::Api::DTO::OrderParams.new(prepare_order_params(BigDecimal("0.0")))
 
         result = described_class.create(order_params)
 

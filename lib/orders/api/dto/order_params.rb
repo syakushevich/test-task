@@ -6,7 +6,7 @@ module Orders
       class OrderParams < Dry::Struct
         attribute :auction_id, Types::UUID
         attribute :buyer_id, Types::UUID
-        attribute :total_payment, Types::Float
+        attribute :total_payment, Types::Decimal
       end
     end
   end

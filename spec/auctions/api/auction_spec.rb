@@ -74,7 +74,7 @@ RSpec.describe Auctions::Api::Auction do
       it "places a bid for an auction" do
         auction = prepare_auction
         bid_params = Auctions::Api::DTO::BidParams.new(
-          amount: 545.5,
+          amount: BigDecimal("545.5"),
           bidder_id: "2eca52ab-6710-4261-8c75-9574b2d22689",
           auction_id: auction.id
         )
@@ -94,7 +94,7 @@ RSpec.describe Auctions::Api::Auction do
       it "returns a failure" do
         auction = prepare_auction
         bid_params = Auctions::Api::DTO::BidParams.new(
-          amount: 0.0,
+          amount: BigDecimal("0.0"),
           bidder_id: "2eca52ab-6710-4261-8c75-9574b2d22689",
           auction_id: auction.id
         )
@@ -113,7 +113,7 @@ RSpec.describe Auctions::Api::Auction do
       it "returns a failure" do
         auction = prepare_auction
         bid_params = Auctions::Api::DTO::BidParams.new(
-          amount: 500.0,
+          amount: BigDecimal("500.0"),
           bidder_id: "2eca52ab-6710-4261-8c75-9574b2d22689",
           auction_id: auction.id
         )
@@ -132,7 +132,7 @@ RSpec.describe Auctions::Api::Auction do
     context "when auction does not exist" do
       it "returns a failure" do
         bid_params = Auctions::Api::DTO::BidParams.new(
-          amount: 500.0,
+          amount: BigDecimal("500.0"),
           bidder_id: "2eca52ab-6710-4261-8c75-9574b2d22689",
           auction_id: "f458b10c-99e1-42ec-abda-77d0b9917936"
         )
@@ -160,9 +160,9 @@ RSpec.describe Auctions::Api::Auction do
         finishes_at: Time.now + 1.day,
         status: "open"
       )
-      Auctions::Models::Bid.create(bidder_id: SecureRandom.uuid, auction_id: auction.id, amount: 30.0)
-      Auctions::Models::Bid.create(bidder_id: winner_id, auction_id: auction.id, amount: 75.0)
-      Auctions::Models::Bid.create(bidder_id: SecureRandom.uuid, auction_id: auction.id, amount: 43.5)
+      Auctions::Models::Bid.create(bidder_id: SecureRandom.uuid, auction_id: auction.id, amount: BigDecimal("30.0"))
+      Auctions::Models::Bid.create(bidder_id: winner_id, auction_id: auction.id, amount: BigDecimal("75.0"))
+      Auctions::Models::Bid.create(bidder_id: SecureRandom.uuid, auction_id: auction.id, amount: BigDecimal("43.5"))
 
       auction
     end
@@ -183,7 +183,8 @@ RSpec.describe Auctions::Api::Auction do
               .except(:created_at, :updated_at)
               .merge(
                 winner_id: winner_id,
-                status: "closed"
+                status: "closed",
+                finishes_at: kind_of(Time)
               )
           )
         end
@@ -199,7 +200,7 @@ RSpec.describe Auctions::Api::Auction do
           expect(create_order_method).to receive(:call).with(
             auction_id: auction.id,
             buyer_id: winner_id,
-            total_payment: 75.0
+            total_payment: BigDecimal("75.0")
           ).and_return(Dry::Monads::Result::Success.new(""))
 
           described_class.finalize(auction.id)
@@ -244,7 +245,7 @@ RSpec.describe Auctions::Api::Auction do
           expect(create_order_method).to receive(:call).with(
             auction_id: auction.id,
             buyer_id: winner_id,
-            total_payment: 75.0
+            total_payment: BigDecimal("75.0")
           ).and_return(Dry::Monads::Failure({ code: :order_disordered }))
 
           result = described_class.finalize(auction.id)

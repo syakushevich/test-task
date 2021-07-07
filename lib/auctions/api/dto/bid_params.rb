@@ -6,7 +6,7 @@ module Auctions
       class BidParams < Dry::Struct
         attribute :bidder_id, Types::UUID
         attribute :auction_id, Types::UUID
-        attribute :amount, Types::Float
+        attribute :amount, Types::Decimal
       end
     end
   end
