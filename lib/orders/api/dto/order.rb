@@ -10,7 +10,7 @@ module Orders
         attribute :auction_id, Types::UUID
         attribute :buyer_id, Types::UUID
         attribute :reference_number, Types::String
-        attribute :total_payment, Types::Decimal | Types::Float
+        attribute :total_payment, Types::Decimal
         attribute :shipping_method, Types::String.optional.default(nil)
         attribute :payment_method, Types::String.optional.default(nil)
         attribute :status, Status

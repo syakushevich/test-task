@@ -26,24 +26,24 @@ auction1 = Auctions::Models::Auction.create(
 Auctions::Models::Bid.create(
   auction_id: auction1.id,
   bidder_id: user1.id,
-  amount: 505.0
+  amount: BigDecimal("505.0")
 )
 
 Auctions::Models::Bid.create(
   auction_id: auction1.id,
   bidder_id: user2.id,
-  amount: 1460.0
+  amount: BigDecimal("1460.0")
 )
 
 Auctions::Models::Bid.create(
   auction_id: auction1.id,
   bidder_id: user1.id,
-  amount: 2678.0
+  amount: BigDecimal("2678.0")
 )
 
 Orders::Models::Order.create(
   auction_id: auction1.id,
-  total_payment: 2678.0
+  total_payment: BigDecimal("2678.0")
 )
 
 auction2 = Auctions::Models::Auction.create(
@@ -60,22 +60,22 @@ auction2 = Auctions::Models::Auction.create(
 Auctions::Models::Bid.create(
   auction_id: auction2.id,
   bidder_id: user2.id,
-  amount: 7320.0
+  amount: BigDecimal("7320.0")
 )
 
 Auctions::Models::Bid.create(
   auction_id: auction2.id,
   bidder_id: user1.id,
-  amount: 23_000.0
+  amount: BigDecimal("23000.0")
 )
 
 Auctions::Models::Bid.create(
   auction_id: auction2.id,
   bidder_id: user2.id,
-  amount: 35_000.0
+  amount: BigDecimal("35000.0")
 )
 
 Orders::Models::Order.create(
   auction_id: auction2.id,
-  total_payment: 35_000.0
+  total_payment: BigDecimal("35000.0")
 )
