@@ -47,14 +47,14 @@ RSpec.describe Orders::Api::Order do
       it "updates the order" do
         order = Orders::Models::Order.create(prepare_order_params.merge(status: "draft", reference_number: "abc"))
 
-        result = described_class.update_shipping_method(order.id, "Fedex Overnight")
+        result = described_class.update_shipping_method(order.id, "Fedyx Overnight")
 
         expect(result).to be_success
         expect(result.value!.to_h).to match(
           order.attributes.symbolize_keys
             .except(:created_at, :updated_at)
             .merge(
-              shipping_method: "Fedex Overnight"
+              shipping_method: "Fedyx Overnight"
             )
         )
       end
@@ -169,7 +169,7 @@ RSpec.describe Orders::Api::Order do
           prepare_order_params.merge(
             status: "draft",
             reference_number: "abc",
-            shipping_method: "AirForce One",
+            shipping_method: "UPZ Express",
             payment_method: "gold"
           )
         )
@@ -213,7 +213,7 @@ RSpec.describe Orders::Api::Order do
           prepare_order_params.merge(
             status: "draft",
             reference_number: "abc",
-            shipping_method: "AirForce One"
+            shipping_method: "UPZ Express"
           )
         )
 
@@ -233,7 +233,7 @@ RSpec.describe Orders::Api::Order do
           prepare_order_params.merge(
             status: "draft",
             reference_number: "abc",
-            shipping_method: "AirForce One",
+            shipping_method: "UPZ Express",
             payment_method: "gold"
           )
         )
