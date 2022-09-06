@@ -11,7 +11,7 @@ module Orders
           ::Orders::Actions::Create.call(params: order_params)
         end
 
-        # @param order_id [Integer] Id of the order to update
+        # @param order_id [UUID] Id of the order to update
         # @param value [String] Shipping method
         # @return [Dry::Monads::Result<Orders::Api::DTO::Order, Failure>] Order as DTO in case of success,
         # or a Failure object
@@ -19,7 +19,7 @@ module Orders
           ::Orders::Actions::Update.call(order_id: order_id, shipping_method: value)
         end
 
-        # @param order_id [Integer] Id of the order to update
+        # @param order_id [UUID] Id of the order to update
         # @param value [String] Payment method
         # @return [Dry::Monads::Result<Orders::Api::DTO::Order, Failure>] Order as DTO in case of success,
         # or a Failure object
@@ -27,7 +27,7 @@ module Orders
           ::Orders::Actions::Update.call(order_id: order_id, payment_method: value)
         end
 
-        # @param order_id [Integer] Id of the order to update
+        # @param order_id [UUID] Id of the order to update
         # @return [Dry::Monads::Result<Orders::Api::DTO::Order, Failure>] Order as DTO in case of success,
         # or a Failure object
         def ship(order_id)
