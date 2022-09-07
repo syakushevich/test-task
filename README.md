@@ -109,7 +109,7 @@ Your task within the test is to implement the code that will fulfil these accept
    4. Other participants should receive information about the highest bid.
 2. When selecting the shipping method, a total order price should be calculated with added shipping cost:
    1. When shipping method `Fedyx Overnight` is selected, then the shipping price should be equal to weight rounded up to 1kg times `$2`,
-   2. When shipping method `UPZ Express` is selected, when the shipping price should be equal to package volume (in m3) times an id field fetched from https://official-joke-api.appspot.com/random_joke.
+   2. When shipping method `UPZ Express` is selected, when the shipping price should be equal to package volume (in m3) times a length of a joke fetched from https://api.chucknorris.io/.
 3. Extend `Users` module so that it would allow a user to add a shipping address to their data. Shipping address should contain city, zip code and street address, all required strings. User can have only one shipping address.
 
    Extend the shipping action from `Order` module to fetch and store the shipping address for the `Order` from the `User` (buyer).
