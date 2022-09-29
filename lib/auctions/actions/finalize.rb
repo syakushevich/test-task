@@ -28,6 +28,16 @@ module Auctions
           yield create_order.call(order_params(auction))
         end
 
+        order = yield fetch_order
+
+        EmailDelivery::Api::Email.deliver_to_winner(yield(Users::Api::User.get_by_id(auction.winner_id)).email, 
+                                                    reference_number: order.reference_number, 
+                                                    total_payment: order.total_payment)
+
+        Users::Models::User.where(id: lost_bidders(auction)).each do |bidder|
+          EmailDelivery::Api::Email.deliver_to_bidder(bidder.email, total_payment: order.total_payment)
+        end
+
         Success(Auctions::Api::DTO::Auction.new(auction.attributes.symbolize_keys))
       end
 
@@ -39,6 +49,12 @@ module Auctions
         auction = Auctions::Models::Auction.find_by(id: auction_id)
 
         auction ? Success(auction) : Failure({ code: :auction_not_found })
+      end
+
+      def fetch_order
+        order = Orders::Models::Order.find_by(auction_id: auction_id)
+
+        order ? Success(order) : Failure({ code: :order_not_found })
       end
 
       def close(auction)
@@ -67,6 +83,10 @@ module Auctions
 
       def highest_bidder(auction)
         auction.bids.order("amount desc").first.bidder_id
+      end
+
+      def lost_bidders(auction)
+        auction.bids.order("amount desc").offset(1).distinct.pluck(:bidder_id)
       end
     end
   end

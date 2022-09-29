@@ -1,4 +1,6 @@
 RSpec.describe Auctions::Api::Auction do
+  require 'faker'
+
   describe ".create" do
     def prepare_auction_params(finishes_at: Time.now.utc + 1.day)
       Auctions::Api::DTO::AuctionParams.new(
@@ -149,6 +151,8 @@ RSpec.describe Auctions::Api::Auction do
   end
 
   describe ".finalize" do
+    let(:winner) { Users::Models::User.create(email: Faker::Internet.email) }
+
     def prepare_auction_and_bids(winner_id = SecureRandom.uuid)
       auction = Auctions::Models::Auction.create(
         name: "Leonardo da Vinci's pencil",
@@ -160,9 +164,11 @@ RSpec.describe Auctions::Api::Auction do
         finishes_at: Time.now + 1.day,
         status: "open"
       )
-      Auctions::Models::Bid.create(bidder_id: SecureRandom.uuid, auction_id: auction.id, amount: BigDecimal("30.0"))
-      Auctions::Models::Bid.create(bidder_id: winner_id, auction_id: auction.id, amount: BigDecimal("75.0"))
-      Auctions::Models::Bid.create(bidder_id: SecureRandom.uuid, auction_id: auction.id, amount: BigDecimal("43.5"))
+      user_1 = Users::Models::User.create(email: Faker::Internet.email)
+      user_2 = Users::Models::User.create(email: Faker::Internet.email)
+      Auctions::Models::Bid.create(bidder_id: user_1.id, auction_id: auction.id, amount: BigDecimal("30.0"))
+      Auctions::Models::Bid.create(bidder_id: user_2.id, auction_id: auction.id, amount: BigDecimal("43.5"))
+      Auctions::Models::Bid.create(bidder_id: winner.id, auction_id: auction.id, amount: BigDecimal("75.0"))
 
       auction
     end
@@ -171,8 +177,7 @@ RSpec.describe Auctions::Api::Auction do
       include ActiveSupport::Testing::TimeHelpers
 
       it "closes the auction and sets the winner_id to the highest bidder id" do
-        winner_id = SecureRandom.uuid
-        auction = prepare_auction_and_bids(winner_id)
+        auction = prepare_auction_and_bids(winner.id)
 
         travel_to(Time.now + 1.day + 1.minute) do
           result = described_class.finalize(auction.id)
@@ -182,7 +187,7 @@ RSpec.describe Auctions::Api::Auction do
             auction.attributes.symbolize_keys
               .except(:created_at, :updated_at)
               .merge(
-                winner_id: winner_id,
+                winner_id: winner.id,
                 status: "closed",
                 finishes_at: kind_of(Time)
               )
@@ -191,18 +196,26 @@ RSpec.describe Auctions::Api::Auction do
       end
 
       it "creates an order" do
-        winner_id = SecureRandom.uuid
-        auction = prepare_auction_and_bids(winner_id)
+        auction = prepare_auction_and_bids(winner.id)
 
         travel_to(Time.now + 1.day + 1.minute) do
           create_order_method = AuctionDependencies.container.resolve(:create_order)
 
           expect(create_order_method).to receive(:call).with(
             auction_id: auction.id,
-            buyer_id: winner_id,
+            buyer_id: winner.id,
             total_payment: BigDecimal("75.0")
           ).and_return(Dry::Monads::Result::Success.new(""))
 
+          described_class.finalize(auction.id)
+        end
+      end
+
+      it "sends emails to all parties" do
+        auction = prepare_auction_and_bids(winner.id)
+        travel_to(Time.now + 1.day + 1.minute) do
+          expect(EmailDelivery::Api::Email).to receive(:deliver_to_winner).and_return(Dry::Monads::Result::Success.new(""))
+          expect(EmailDelivery::Api::Email).to receive(:deliver_to_bidder).twice.and_return(Dry::Monads::Result::Success.new(""))
           described_class.finalize(auction.id)
         end
       end
@@ -210,7 +223,7 @@ RSpec.describe Auctions::Api::Auction do
 
     context "when auction is not finished yet" do
       it "returns a failure" do
-        auction = prepare_auction_and_bids
+        auction = prepare_auction_and_bids(winner.id)
 
         result = described_class.finalize(auction.id)
 
@@ -236,15 +249,14 @@ RSpec.describe Auctions::Api::Auction do
       include ActiveSupport::Testing::TimeHelpers
 
       it "returns a failure and does not close the auction" do
-        winner_id = SecureRandom.uuid
-        auction = prepare_auction_and_bids(winner_id)
+        auction = prepare_auction_and_bids(winner.id)
 
         travel_to(Time.now + 1.day + 1.minute) do
           create_order_method = AuctionDependencies.container.resolve(:create_order)
 
           expect(create_order_method).to receive(:call).with(
             auction_id: auction.id,
-            buyer_id: winner_id,
+            buyer_id: winner.id,
             total_payment: BigDecimal("75.0")
           ).and_return(Dry::Monads::Failure({ code: :order_disordered }))
 

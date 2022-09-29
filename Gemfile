@@ -19,4 +19,5 @@ group :test do
   gem "rspec", "~> 3.10.0"
   gem "rspec-sidekiq", "~> 3.1.0"
   gem "simplecov", "~> 0.21.2"
+  gem 'faker'
 end
