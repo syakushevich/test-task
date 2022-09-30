@@ -20,4 +20,5 @@ group :test do
   gem "rspec-sidekiq", "~> 3.1.0"
   gem "simplecov", "~> 0.21.2"
   gem 'faker'
+  gem 'webmock'
 end

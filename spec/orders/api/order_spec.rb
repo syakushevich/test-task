@@ -1,7 +1,17 @@
 RSpec.describe Orders::Api::Order do
   def prepare_order_params(total_payment = BigDecimal("1500.0"))
+    auction = Auctions::Models::Auction.create(
+      name: "Leonardo da Vinci's pencil",
+      creator_id: "e155fe2c-c588-4320-8acf-a1ff0d82190b",
+      package_weight: 0.05,
+      package_size_x: 0.03,
+      package_size_y: 0.005,
+      package_size_z: 0.002,
+      finishes_at: Time.now + 1.day,
+      status: "open"
+    )
     {
-      auction_id: "dfcf17c4-beba-4209-b9e6-2b303313470c",
+      auction_id: auction.id,
       buyer_id: "b8c9ad09-084f-4c39-9b94-944e12efc736",
       total_payment: total_payment
     }
@@ -21,7 +31,8 @@ RSpec.describe Orders::Api::Order do
             status: "draft",
             reference_number: kind_of(String),
             payment_method: nil,
-            shipping_method: nil
+            shipping_method: nil,
+            total_order_price: order_params.total_payment
           )
         )
       end
@@ -46,17 +57,11 @@ RSpec.describe Orders::Api::Order do
     context "when value given" do
       it "updates the order" do
         order = Orders::Models::Order.create(prepare_order_params.merge(status: "draft", reference_number: "abc"))
-
-        result = described_class.update_shipping_method(order.id, "Fedyx Overnight")
+        shipping_method = "Fedyx Overnight"
+        result = described_class.update_shipping_method(order.id, shipping_method)
 
         expect(result).to be_success
-        expect(result.value!.to_h).to match(
-          order.attributes.symbolize_keys
-            .except(:created_at, :updated_at)
-            .merge(
-              shipping_method: "Fedyx Overnight"
-            )
-        )
+        expect(result.value!.to_h).to match(order.reload.order_params.except(:created_at, :updated_at))
       end
     end
 
@@ -110,13 +115,7 @@ RSpec.describe Orders::Api::Order do
         result = described_class.update_payment_method(order.id, "Stripe")
 
         expect(result).to be_success
-        expect(result.value!.to_h).to match(
-          order.attributes.symbolize_keys
-            .except(:created_at, :updated_at)
-            .merge(
-              payment_method: "Stripe"
-            )
-        )
+        expect(result.value!.to_h).to match(order.reload.order_params.except(:created_at, :updated_at))
       end
     end
 
@@ -178,7 +177,7 @@ RSpec.describe Orders::Api::Order do
 
         expect(result).to be_success
         expect(result.value!.to_h).to match(
-          order.attributes.symbolize_keys
+          order.reload.order_params
             .except(:created_at, :updated_at)
             .merge(
               status: "shipped"
