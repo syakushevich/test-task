@@ -26,17 +26,17 @@ module Auctions
         ActiveRecord::Base.transaction do
           auction = yield close(auction)
           yield create_order.call(order_params(auction))
+          order = yield fetch_order
+
+          EmailDelivery::Api::Email.deliver_to_winner(yield(Users::Api::User.get_by_id(auction.winner_id)).email, 
+                                                      reference_number: order.reference_number, 
+                                                      total_payment: order.total_payment)
+
+          Users::Models::User.where(id: lost_bidders(auction)).each do |bidder|
+            EmailDelivery::Api::Email.deliver_to_bidder(bidder.email, total_payment: order.total_payment)
+          end
         end
 
-        order = yield fetch_order
-
-        EmailDelivery::Api::Email.deliver_to_winner(yield(Users::Api::User.get_by_id(auction.winner_id)).email, 
-                                                    reference_number: order.reference_number, 
-                                                    total_payment: order.total_payment)
-
-        Users::Models::User.where(id: lost_bidders(auction)).each do |bidder|
-          EmailDelivery::Api::Email.deliver_to_bidder(bidder.email, total_payment: order.total_payment)
-        end
 
         Success(Auctions::Api::DTO::Auction.new(auction.attributes.symbolize_keys))
       end

@@ -6,7 +6,7 @@ module Orders
   module Actions
     class Ship
       include Dry::Monads[:result]
-      include Dry::Monads::Do.for(:call)
+      include Dry::Monads::Do.for(:call, :fetch_shipping_address)
 
       class << self
         def call(**kwargs)
@@ -20,10 +20,11 @@ module Orders
 
       def call
         order = yield fetch_order
+        shipping_address = yield fetch_shipping_address(order)
         yield validate_complete_order(order)
         yield ship(order)
 
-        Success(Orders::Api::DTO::Order.new(order.order_params))
+        Success(Orders::Api::DTO::ShippedOrder.new(shipping_params(order, shipping_address)))
       end
 
       private
@@ -34,6 +35,19 @@ module Orders
         order = Orders::Models::Order.find_by(id: order_id)
 
         order ? Success(order) : Failure({ code: :order_not_found })
+      end
+
+      def fetch_shipping_address(order)
+        user = yield fetch_user(order)
+        shipping_address = user.shipping_address
+
+        shipping_address ? Success(shipping_address) : Failure({ code: :shipping_address_not_found })
+      end
+      
+      def fetch_user(order)
+        user = Users::Models::User.find_by_id(order.buyer_id)
+
+        user ? Success(user) : Failure({ code: :user_not_found })
       end
 
       def validate_complete_order(order)
@@ -58,6 +72,10 @@ module Orders
         else
           Failure({ code: :order_not_shipped, details: order.errors.to_hash })
         end
+      end
+
+      def shipping_params(order, shipping_address)
+        order.order_params.merge(shipping_address.shipping_params)
       end
     end
   end
