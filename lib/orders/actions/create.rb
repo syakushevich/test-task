@@ -19,7 +19,7 @@ module Orders
         order = Orders::Models::Order.create(order_params)
 
         if order.errors.empty?
-          Success(Orders::Api::DTO::Order.new(order.attributes.symbolize_keys))
+          Success(Orders::Api::DTO::Order.new(order.order_params))
         else
           Failure({ code: :order_not_created, details: order.errors.to_hash })
         end

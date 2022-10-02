@@ -3,10 +3,7 @@
 module Orders
   module Api
     module DTO
-      class Order < Dry::Struct
-        Status = Types::String.enum("draft", "shipped")
-        ShippingMethods = { "Fedyx Overnight" => :fedyx, "UPZ Express" => :upz }
-
+      class ShippedOrder < Dry::Struct
         attribute :id, Types::UUID
         attribute :auction_id, Types::UUID
         attribute :buyer_id, Types::UUID
@@ -15,7 +12,10 @@ module Orders
         attribute :total_order_price, Types::Decimal.optional.default(nil)
         attribute :shipping_method, Types::String.optional.default(nil)
         attribute :payment_method, Types::String.optional.default(nil)
-        attribute :status, Status
+        attribute :status, Orders::Api::DTO::Order::Status
+        attribute :city, Types::String
+        attribute :zip, Types::String
+        attribute :street_address, Types::String
       end
     end
   end

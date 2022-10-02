@@ -8,6 +8,10 @@ module Auctions
       has_many :bids
 
       validates :status, inclusion: { in: Auctions::Api::DTO::Auction::Status.values }
+
+      def dimensions
+        package_size_x * package_size_y * package_size_z
+      end
     end
   end
 end

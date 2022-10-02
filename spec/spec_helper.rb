@@ -8,7 +8,8 @@ ENV["APP_ENV"] = "test"
 require "active_support/testing/time_helpers"
 require "dry/monads/result"
 require_relative "../config/application"
-
+require 'webmock/rspec'
+WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
   config.before(:suite) do
@@ -20,6 +21,8 @@ RSpec.configure do |config|
     DatabaseCleaner[:active_record]
     DatabaseCleaner[:active_record].strategy = :transaction
     DatabaseCleaner[:active_record].start
+
+    stub_request(:get, /api.chucknorris.io/).to_return(status: 200, body: { value: "stubbed response" }.to_json, headers: {})
   end
 
   config.after do
